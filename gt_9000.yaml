@@ -1,0 +1,63 @@
+esphome:
+  name: gt_9000
+  platform: ESP8266
+  board: esp01_1m
+  platformio_options:
+    lib_deps: "rc-switch@2.6.2"
+  includes:
+    - my_custom_sensor.h
+
+
+wifi:
+  ssid: "XXXXXXXXXX"
+  password: "YYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Gt 9000 Fallback Hotspot"
+    password: "ZZZZZZZZZZZ"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+# Individual switches
+switch:
+  - platform: template
+    name: GT 9000 RF1 Power Button
+    assumed_state: true
+    optimistic: true
+    turn_on_action:
+      - lambda: |-
+          mySwitch.enableTransmit(2);
+          mySwitch.setProtocol(5);
+          mySwitch.setPulseLength(488);
+          mySwitch.send("101100011000011101101100");
+    turn_off_action:
+      - lambda: |-
+          mySwitch.enableTransmit(2);
+          mySwitch.setProtocol(5);
+          mySwitch.setPulseLength(488);
+          mySwitch.send("101110100000010001111100");
+  - platform: template
+    name: GT 9000 RF2 Power Button
+    assumed_state: true
+    optimistic: true
+    turn_on_action:
+      - lambda: |-
+          mySwitch.enableTransmit(2);
+          mySwitch.setProtocol(5);
+          mySwitch.setPulseLength(488);
+          mySwitch.send("101100101110100011100101");
+    turn_off_action:
+      - lambda: |-
+          mySwitch.enableTransmit(2);
+          mySwitch.setProtocol(5);
+          mySwitch.setPulseLength(488);
+          mySwitch.send("101110010011000011010101");
